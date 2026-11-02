@@ -21,6 +21,7 @@
 		B10000A3 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A3 /* OnboardingView.swift */; };
 		B10000A4 /* ServerConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A4 /* ServerConfigView.swift */; };
 		B10000A5 /* SubsonicClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A5 /* SubsonicClient.swift */; };
+		B10000A6 /* AppReloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A6 /* AppReloader.swift */; };
 		B10000A2 /* ServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A2 /* ServerConfig.swift */; };
 		B10000A1 /* HapticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A1 /* HapticsService.swift */; };
 		B1000012 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000012 /* HomeView.swift */; };
@@ -45,7 +46,6 @@
 		B1000031 /* CommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000031 /* CommentsView.swift */; };
 		B1000032 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000032 /* NotificationService.swift */; };
 		B1000033 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000033 /* NotificationsView.swift */; };
-		B1000034 /* VipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000034 /* VipView.swift */; };
 		B1000035 /* MusicUploadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000035 /* MusicUploadService.swift */; };
 		B1000036 /* MusicUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000036 /* MusicUploadView.swift */; };
 		B1000037 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000037 /* AppearanceSettings.swift */; };
@@ -86,6 +86,7 @@
 		B20000A3 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		B20000A4 /* ServerConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfigView.swift; sourceTree = "<group>"; };
 		B20000A5 /* SubsonicClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsonicClient.swift; sourceTree = "<group>"; };
+		B20000A6 /* AppReloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReloader.swift; sourceTree = "<group>"; };
 		B20000A2 /* ServerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfig.swift; sourceTree = "<group>"; };
 		B20000A1 /* HapticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsService.swift; sourceTree = "<group>"; };
 		B2000012 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -112,7 +113,6 @@
 		B2000031 /* CommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsView.swift; sourceTree = "<group>"; };
 		B2000032 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		B2000033 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
-		B2000034 /* VipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VipView.swift; sourceTree = "<group>"; };
 		B2000035 /* MusicUploadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicUploadService.swift; sourceTree = "<group>"; };
 		B2000036 /* MusicUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicUploadView.swift; sourceTree = "<group>"; };
 		B2000037 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
@@ -215,6 +215,7 @@
 				B2000011 /* AudioPlayerService.swift */,
 				B20000A2 /* ServerConfig.swift */,
 				B20000A5 /* SubsonicClient.swift */,
+				B20000A6 /* AppReloader.swift */,
 				B20000A1 /* HapticsService.swift */,
 				B2000023 /* PlaylistImportService.swift */,
 				B2000025 /* NonceService.swift */,
@@ -255,7 +256,6 @@
 				B2000029 /* LyricsParser.swift */,
 				B2000031 /* CommentsView.swift */,
 				B2000033 /* NotificationsView.swift */,
-				B2000034 /* VipView.swift */,
 				B2000036 /* MusicUploadView.swift */,
 				B2000038 /* AppearanceView.swift */,
 				B2000040 /* BlacklistView.swift */,
@@ -408,6 +408,7 @@
 				B10000A3 /* OnboardingView.swift in Sources */,
 				B10000A4 /* ServerConfigView.swift in Sources */,
 				B10000A5 /* SubsonicClient.swift in Sources */,
+				B10000A6 /* AppReloader.swift in Sources */,
 				B1000003 /* Music.swift in Sources */,
 				B1000004 /* User.swift in Sources */,
 				B1000005 /* Playlist.swift in Sources */,
@@ -440,7 +441,6 @@
 				B1000031 /* CommentsView.swift in Sources */,
 				B1000032 /* NotificationService.swift in Sources */,
 				B1000033 /* NotificationsView.swift in Sources */,
-				B1000034 /* VipView.swift in Sources */,
 				B1000035 /* MusicUploadService.swift in Sources */,
 				B1000036 /* MusicUploadView.swift in Sources */,
 				B1000037 /* AppearanceSettings.swift in Sources */,

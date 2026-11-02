@@ -24,12 +24,6 @@ struct ProfileView: View {
                                 Text(user.email)
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
-                                if user.isVip == true {
-                                    Label("VIP", systemImage: "crown.fill")
-                                        .font(.caption2)
-                                        .fontWeight(.semibold)
-                                        .foregroundStyle(.orange)
-                                }
                             }
                         }
                         .padding(.vertical, 4)
@@ -58,25 +52,6 @@ struct ProfileView: View {
                 }
 
                 if authService.isLoggedIn {
-                    Section {
-                        NavigationLink {
-                            VipView()
-                        } label: {
-                            HStack {
-                                Label(
-                                    authService.currentUser?.isVip == true ? "会员已开通" : "开通会员",
-                                    systemImage: "crown.fill"
-                                )
-                                Spacer()
-                                if let expiry = authService.currentUser?.vipExpiresAt, !expiry.isEmpty {
-                                    Text(String(expiry.prefix(10)))
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                        }
-                    }
-
                     Section("音乐") {
                         NavigationLink {
                             NotificationsView()

@@ -149,6 +149,8 @@ final class ServerConfig: ObservableObject {
         }
         apply(kind: kind, url: url, credentials: credentials)
         await ClientIdentityService.shared.resetForNewServer()
+        // 重建界面，避免首页还留着上一个服务器的列表
+        AppReloader.shared.reload()
         return nil
     }
 

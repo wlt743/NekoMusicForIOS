@@ -14,6 +14,7 @@ struct NekoMusicApp: App {
     @StateObject private var playerService = AudioPlayerService.shared
     @StateObject private var appearance = AppearanceSettings.shared
     @StateObject private var serverConfig = ServerConfig.shared
+    @StateObject private var reloader = AppReloader.shared
 
     var body: some Scene {
         WindowGroup {
@@ -28,6 +29,7 @@ struct NekoMusicApp: App {
                     OnboardingView(config: serverConfig)
                 }
             }
+            .id(reloader.token)   // 换服务器后整棵界面重建
             .tint(appearance.tintColor)
             .preferredColorScheme(appearance.colorScheme)
         }
