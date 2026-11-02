@@ -24,7 +24,7 @@ struct NekoMusicApp: App {
                         .environmentObject(playerService)
                         .environmentObject(appearance)
                 } else {
-                    // 未同意声明、或没选服务器之前，不进入主界面
+                    // 未同意声明、或没选来源之前，不进入主界面
                     OnboardingView(config: serverConfig)
                 }
             }

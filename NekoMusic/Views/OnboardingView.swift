@@ -4,6 +4,7 @@ import SwiftUI
 /// 应用不内置任何服务地址，也不默认连接任何服务器。
 struct OnboardingView: View {
     @ObservedObject var config: ServerConfig
+    var onFinished: (() -> Void)?
     @State private var step = 0
     @State private var agreed = false
     @State private var customInput = ""
@@ -95,66 +96,20 @@ struct OnboardingView: View {
     // MARK: - 第二屏：资源来源
 
     private var choiceStep: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 14) {
             Text("选择音乐来源")
                 .font(.system(size: 24, weight: .bold))
                 .foregroundStyle(.white)
-            Text("本应用不内置曲库。你可以使用社区常用地址，也可以填写自己的接口服务器。内容来源与合法性由你自行确认。")
+            Text("本应用不内置曲库。请选择来源类型，或填写你自己的服务器。内容来源与合法性由你自行确认。")
                 .font(.footnote)
                 .foregroundStyle(.white.opacity(0.6))
                 .fixedSize(horizontal: false, vertical: true)
 
-            optionCard(
-                title: "使用 NekoMusic 资源",
-                subtitle: "社区常用地址，由第三方提供与维护",
-                icon: "music.note.house"
-            ) {
-                config.usePreset()
+            ScrollView {
+                SourcePickerList(config: config)
+                    .padding(.trailing, 2)
             }
-
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 10) {
-                    Image(systemName: "server.rack")
-                        .foregroundStyle(.white.opacity(0.8))
-                    Text("自己配置")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(.white)
-                }
-                TextField("https://你的服务器地址", text: $customInput)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .keyboardType(.URL)
-                    .padding(12)
-                    .background(Color.white.opacity(0.08))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .foregroundStyle(.white)
-                if let errorText {
-                    Text(errorText)
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                }
-                Button {
-                    if config.useCustom(customInput) {
-                        errorText = nil
-                    } else {
-                        errorText = "地址无效，请填入以 http:// 或 https:// 开头的完整地址"
-                    }
-                } label: {
-                    Text("使用这个地址")
-                        .font(.subheadline.weight(.semibold))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(Color.white.opacity(0.14))
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
-                .buttonStyle(.plain)
-            }
-            .padding(16)
-            .background(Color.white.opacity(0.05))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-
-            Spacer()
+            .scrollIndicators(.hidden)
 
             Button {
                 step = 0
@@ -167,32 +122,10 @@ struct OnboardingView: View {
             .frame(maxWidth: .infinity)
         }
         .padding(20)
-    }
-
-    private func optionCard(title: String, subtitle: String, icon: String,
-                            action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack(spacing: 14) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundStyle(Color.accentColor)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(title)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(.white)
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.6))
-                }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.white.opacity(0.35))
-            }
-            .padding(16)
-            .background(Color.white.opacity(0.05))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+        .onChange(of: config.isReady) { ready in
+            // 选好来源后自动进入主界面
+            if ready { onFinished?() }
         }
-        .buttonStyle(.plain)
     }
 }
 
