@@ -94,10 +94,30 @@ enum SubsonicClient {
     }
 
     static func lyrics(for music: Music) async throws -> String {
+        // 1) OpenSubsonic 的结构化歌词（Navidrome 走这条，带时间轴）
+        if let remoteID = remoteID(for: music.id) {
+            let encoded = remoteID.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            if let response = try? await get("getLyricsBySongId.view", extra: "id=\(encoded)"),
+               let list = (response["lyricsList"] as? [String: Any])?["structuredLyrics"] as? [[String: Any]],
+               let first = list.first {
+                let lines = first["line"] as? [[String: Any]] ?? []
+                let lrc = lines.compactMap { line -> String? in
+                    guard let value = line["value"] as? String else { return nil }
+                    guard let start = line["start"] as? Int else { return value }
+                    let total = Double(start) / 1000.0
+                    let minutes = Int(total) / 60
+                    let seconds = total - Double(minutes * 60)
+                    return String(format: "[%02d:%05.2f]%@", minutes, seconds, value)
+                }.joined(separator: "\n")
+                if !lrc.isEmpty { return lrc }
+            }
+        }
+
+        // 2) 老的按歌手/歌名查（部分服务器只支持这个）
         let title = music.title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let artist = music.artist.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let response = try await get("getLyrics.view", extra: "title=\(title)&artist=\(artist)")
-        if let lyrics = (response["lyrics"] as? [String: Any])?["value"] as? String {
+        if let response = try? await get("getLyrics.view", extra: "title=\(title)&artist=\(artist)"),
+           let lyrics = (response["lyrics"] as? [String: Any])?["value"] as? String {
             return lyrics
         }
         return ""

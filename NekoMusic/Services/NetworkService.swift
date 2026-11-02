@@ -228,6 +228,24 @@ class NetworkService {
             throw NetworkError.invalidURL
         }
 
+        // 非 NekoMusic 来源（Subsonic / Jellyfin / 通用接口）没有 nonce 与实例签名这一套，
+        // 直接走普通请求，否则会因为换不到 nonce 而整个失败。
+        if ServerConfigSnapshot.isSubsonic {
+            var request = URLRequest(url: requestURL)
+            request.httpMethod = method
+            request.timeoutInterval = 20
+            request.setValue("application/json, image/*, */*", forHTTPHeaderField: "Accept")
+            if let body {
+                request.httpBody = body
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            }
+            let (data, response) = try await URLSession.shared.data(for: request)
+            if let http = response as? HTTPURLResponse, !(200..<400).contains(http.statusCode) {
+                throw NetworkError.serverError("服务器返回 \(http.statusCode)")
+            }
+            return data
+        }
+
         let path = requestURL.path
         let rawQuery = URLComponents(url: requestURL, resolvingAgainstBaseURL: false)?.percentEncodedQuery ?? ""
         let needsNonce = APIConfig.requiresNonce(path: path)
