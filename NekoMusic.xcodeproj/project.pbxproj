@@ -22,6 +22,7 @@
 		B10000A4 /* ServerConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A4 /* ServerConfigView.swift */; };
 		B10000A5 /* SubsonicClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A5 /* SubsonicClient.swift */; };
 		B10000A6 /* AppReloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A6 /* AppReloader.swift */; };
+		B10000A7 /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A7 /* CredentialStore.swift */; };
 		B10000A2 /* ServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A2 /* ServerConfig.swift */; };
 		B10000A1 /* HapticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A1 /* HapticsService.swift */; };
 		B1000012 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000012 /* HomeView.swift */; };
@@ -87,6 +88,7 @@
 		B20000A4 /* ServerConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfigView.swift; sourceTree = "<group>"; };
 		B20000A5 /* SubsonicClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsonicClient.swift; sourceTree = "<group>"; };
 		B20000A6 /* AppReloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReloader.swift; sourceTree = "<group>"; };
+		B20000A7 /* CredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStore.swift; sourceTree = "<group>"; };
 		B20000A2 /* ServerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfig.swift; sourceTree = "<group>"; };
 		B20000A1 /* HapticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsService.swift; sourceTree = "<group>"; };
 		B2000012 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				B20000A2 /* ServerConfig.swift */,
 				B20000A5 /* SubsonicClient.swift */,
 				B20000A6 /* AppReloader.swift */,
+				B20000A7 /* CredentialStore.swift */,
 				B20000A1 /* HapticsService.swift */,
 				B2000023 /* PlaylistImportService.swift */,
 				B2000025 /* NonceService.swift */,
@@ -409,6 +412,7 @@
 				B10000A4 /* ServerConfigView.swift in Sources */,
 				B10000A5 /* SubsonicClient.swift in Sources */,
 				B10000A6 /* AppReloader.swift in Sources */,
+				B10000A7 /* CredentialStore.swift in Sources */,
 				B1000003 /* Music.swift in Sources */,
 				B1000004 /* User.swift in Sources */,
 				B1000005 /* Playlist.swift in Sources */,

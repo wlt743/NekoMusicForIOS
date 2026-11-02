@@ -83,12 +83,17 @@ final class ServerConfig: ObservableObject {
         let savedKind = SourceKind(rawValue: defaults.string(forKey: Keys.kind) ?? "")
         kind = savedKind
         baseURL = defaults.string(forKey: Keys.url) ?? ""
+        var loaded = Credentials()
         if let data = defaults.data(forKey: Keys.credentials),
            let saved = try? JSONDecoder().decode(Credentials.self, from: data) {
-            credentials = saved
-        } else {
-            credentials = Credentials()
+            loaded = saved
         }
+        // 密码只在钥匙串里，不进 UserDefaults
+        let storedPassword = CredentialStore.load()
+        if !storedPassword.isEmpty {
+            loaded.password = storedPassword
+        }
+        credentials = loaded
         hasAcceptedTerms = defaults.bool(forKey: Keys.termsAccepted)
         APIConfig.baseURL = kind?.playbackSupported == true ? baseURL : ""
         ServerConfigSnapshot.baseURL = baseURL
@@ -120,9 +125,12 @@ final class ServerConfig: ObservableObject {
         self.credentials = credentials
         defaults.set(kind.rawValue, forKey: Keys.kind)
         defaults.set(url, forKey: Keys.url)
-        if let data = try? JSONEncoder().encode(credentials) {
+        var persisted = credentials
+        persisted.password = ""          // 密码不落 UserDefaults
+        if let data = try? JSONEncoder().encode(persisted) {
             defaults.set(data, forKey: Keys.credentials)
         }
+        CredentialStore.save(password: credentials.password)
         // NekoMusic 协议才把地址喂给网络层；Subsonic 走独立客户端
         APIConfig.baseURL = kind.playbackSupported ? url : ""
         ServerConfigSnapshot.baseURL = url

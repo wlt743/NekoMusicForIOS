@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 
 /// Subsonic / Navidrome 兼容客户端。
 ///
@@ -9,25 +10,59 @@ enum SubsonicClient {
     /// 外部模型只有 Int 型 id，这里维护 hash ↔ 服务器字符串 id 的映射
     private static var idMap: [Int: String] = [:]
     private static var objects: [Int: Music] = [:]
+    private static var coverIDs: [Int: String] = [:]
     private static var reverseMap: [String: Int] = [:]
     private static let lock = NSLock()
 
     // MARK: - 鉴权参数
 
+    /// 标准 Subsonic 认证：t = md5(密码 + 盐)，s = 盐。
+    /// 少数老服务端只认明文 p，调用失败时由上层用 `plainAuthQuery` 重试。
     private static var authQuery: String {
+        let user = ServerConfigSnapshot.username.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let salt = UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(12).lowercased()
+        let token = md5Hex(ServerConfigSnapshot.password + salt)
+        return "u=\(user)&t=\(token)&s=\(salt)&v=1.16.1&c=NekoMusic&f=json"
+    }
+
+    private static var plainAuthQuery: String {
         let user = ServerConfigSnapshot.username.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let pass = ServerConfigSnapshot.password.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         return "u=\(user)&p=\(pass)&v=1.16.1&c=NekoMusic&f=json"
+    }
+
+    static var usesPlainAuth = false
+
+    private static func md5Hex(_ text: String) -> String {
+        let digest = Insecure.MD5.hash(data: Data(text.utf8))
+        return digest.map { String(format: "%02x", $0) }.joined()
     }
 
     private static func url(_ path: String, extra: String = "") -> URL? {
         let base = ServerConfigSnapshot.baseURL
         guard !base.isEmpty else { return nil }
         let tail = extra.isEmpty ? "" : "&\(extra)"
-        return URL(string: "\(base)/rest/\(path)?\(authQuery)\(tail)")
+        let auth = usesPlainAuth ? plainAuthQuery : authQuery
+        return URL(string: "\(base)/rest/\(path)?\(auth)\(tail)")
     }
 
     private static func get(_ path: String, extra: String = "") async throws -> [String: Any] {
+        do {
+            return try await getOnce(path, extra: extra)
+        } catch let error as NekoSourceError {
+            if case .server(let message) = error,
+               message.localizedCaseInsensitiveContains("auth"),
+               !usesPlainAuth {
+                // 老服务端不支持 token 认证，退回明文密码
+                usesPlainAuth = true
+                let retry = try await getOnce(path, extra: extra)
+                return retry
+            }
+            throw error
+        }
+    }
+
+    private static func getOnce(_ path: String, extra: String = "") async throws -> [String: Any] {
         guard let url = url(path, extra: extra) else { throw NekoSourceError.notConfigured }
         var request = URLRequest(url: url)
         request.timeoutInterval = 15
@@ -51,7 +86,7 @@ enum SubsonicClient {
     }
 
     static func latest(limit: Int = 60) async throws -> [Music] {
-        let response = try await get("getAlbumList2.view", extra: "type=newest&size=\(max(1, limit / 10))")
+        let response = try await get("getAlbumList2.view", extra: "type=newest&size=\(min(500, max(10, limit / 10)))")
         let albums = (response["albumList2"] as? [String: Any])?["album"] as? [[String: Any]] ?? []
         var songs: [Music] = []
         for album in albums.prefix(10) {
@@ -88,8 +123,11 @@ enum SubsonicClient {
     }
 
     static func coverURL(for music: Music) -> URL? {
-        guard let remoteID = remoteID(for: music.id) else { return nil }
-        let encoded = remoteID.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        lock.lock()
+        let coverID = coverIDs[music.id]
+        lock.unlock()
+        guard let id = coverID ?? remoteID(for: music.id) else { return nil }
+        let encoded = id.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         return url("getCoverArt.view", extra: "id=\(encoded)&size=600")
     }
 
@@ -141,7 +179,9 @@ enum SubsonicClient {
             playCount: nil,
             lrc: nil
         )
-        lock.lock(); objects[id] = music; lock.unlock()
+        lock.lock(); objects[id] = music
+        if let cover = raw["coverArt"] as? String { coverIDs[id] = cover }
+        lock.unlock()
         return music
     }
 
