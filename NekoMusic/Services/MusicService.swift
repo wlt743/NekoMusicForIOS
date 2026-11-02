@@ -16,7 +16,11 @@ class MusicService {
 
     // MARK: - Search
 
+    /// 当前是否为 Subsonic 来源
+    private var isSubsonic: Bool { ServerConfigSnapshot.isSubsonic }
+
     func searchMusic(query: String) async throws -> [Music] {
+        if isSubsonic { return try await SubsonicClient.search(query) }
         let data = try await network.rawPost(
             url: APIConfig.musicSearchURL(),
             json: ["query": query]
@@ -27,6 +31,7 @@ class MusicService {
     // MARK: - Ranking
 
     func getRanking(limit: Int = 200) async throws -> [Music] {
+        if isSubsonic { return try await SubsonicClient.random(limit: limit) }
         let data = try await network.rawGet(url: APIConfig.musicRankingURL())
         return try parseMusicList(data: data, dataKey: "data", errorHint: "获取排行榜失败")
     }
@@ -34,6 +39,7 @@ class MusicService {
     // MARK: - Latest
 
     func getLatest(limit: Int = 300) async throws -> [Music] {
+        if isSubsonic { return try await SubsonicClient.latest(limit: limit) }
         let data = try await network.rawGet(url: APIConfig.musicLatestURL())
         return try parseMusicList(data: data, dataKey: "data", errorHint: "获取最新音乐失败")
     }
@@ -91,7 +97,10 @@ class MusicService {
     }
 
     func getLyrics(musicId: Int) async throws -> String {
-        try await getMusicInfo(id: musicId).lyrics
+        if isSubsonic, let music = SubsonicClient.music(for: musicId) {
+            return try await SubsonicClient.lyrics(for: music)
+        }
+        return try await getMusicInfo(id: musicId).lyrics
     }
 
     // MARK: - Audio URL
@@ -99,6 +108,13 @@ class MusicService {
     /// 新接口不再 302 到音频，而是返回 `data.url`（站内媒体相对地址），
     /// 客户端需要再对这一地址发起普通 GET。
     func resolveAudioURL(musicId: Int, quality: String = "hq") async throws -> URL {
+        if isSubsonic {
+            guard let music = SubsonicClient.music(for: musicId),
+                  let url = SubsonicClient.streamURL(for: music) else {
+                throw NekoSourceError.badResponse
+            }
+            return url
+        }
         let data = try await network.rawGet(url: APIConfig.musicFileURL(id: musicId, quality: quality))
         guard
             let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],

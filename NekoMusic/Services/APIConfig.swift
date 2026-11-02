@@ -207,6 +207,12 @@ enum APIConfig {
     }
 
     static func buildMusicCoverURL(musicId: Int, coverFilePath: String?) -> String {
+        // Subsonic 来源的封面走 /rest/getCoverArt
+        if ServerConfigSnapshot.isSubsonic,
+           let music = SubsonicClient.music(for: musicId),
+           let url = SubsonicClient.coverURL(for: music) {
+            return url.absoluteString
+        }
         if let coverPath = coverFilePath, !coverPath.isEmpty {
             if coverPath.hasPrefix("http") {
                 return coverPath

@@ -50,7 +50,7 @@ final class ServerConfig: ObservableObject {
 
         /// 当前是否已支持播放（其余类型先支持保存与连通性校验）
         var playbackSupported: Bool {
-            self == .neko || self == .nekoCustom
+            self == .neko || self == .nekoCustom || self == .subsonic
         }
     }
 
@@ -90,7 +90,11 @@ final class ServerConfig: ObservableObject {
             credentials = Credentials()
         }
         hasAcceptedTerms = defaults.bool(forKey: Keys.termsAccepted)
-        APIConfig.baseURL = baseURL
+        APIConfig.baseURL = kind?.playbackSupported == true ? baseURL : ""
+        ServerConfigSnapshot.baseURL = baseURL
+        ServerConfigSnapshot.username = credentials.username
+        ServerConfigSnapshot.password = credentials.password
+        ServerConfigSnapshot.isSubsonic = (kind == .subsonic)
     }
 
     /// 首次启动流程是否走完（同意了协议且选好了来源）
@@ -119,8 +123,12 @@ final class ServerConfig: ObservableObject {
         if let data = try? JSONEncoder().encode(credentials) {
             defaults.set(data, forKey: Keys.credentials)
         }
-        // NekoMusic 协议才把地址喂给网络层；其它来源的数据层适配还没做
+        // NekoMusic 协议才把地址喂给网络层；Subsonic 走独立客户端
         APIConfig.baseURL = kind.playbackSupported ? url : ""
+        ServerConfigSnapshot.baseURL = url
+        ServerConfigSnapshot.username = credentials.username
+        ServerConfigSnapshot.password = credentials.password
+        ServerConfigSnapshot.isSubsonic = (kind == .subsonic)
     }
 
     // MARK: - 连通性校验
