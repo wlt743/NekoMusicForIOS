@@ -1,0 +1,32 @@
+{
+  "name": "NekoMusic",
+  "identifier": "com.wlt743.nekomusic.source",
+  "subtitle": "为 NekoMusic 准备好你的 iPhone",
+  "description": "NekoMusic 的 iOS 原生客户端。本源码库只分发自己构建的版本，不含任何音源。",
+  "iconURL": "https://raw.githubusercontent.com/wlt743/NekoMusicForIOS_Not-web/main/docs/images/nekomusic-iphone.jpg",
+  "headerURL": "https://raw.githubusercontent.com/wlt743/NekoMusicForIOS_Not-web/main/docs/images/nekomusic-iphone.jpg",
+  "website": "https://github.com/wlt743/NekoMusicForIOS_Not-web",
+  "tintColor": "#FF2D55",
+  "apps": [
+    {
+      "name": "NekoMusic",
+      "bundleIdentifier": "com.wlt743.nekomusic",
+      "developerName": "wlt743",
+      "subtitle": "第三方音乐播放器客户端",
+      "localizedDescription": "SwiftUI 原生客户端：后台播放、锁屏控制、歌单导入、歌词、收藏歌单、听歌识曲与分享视频，支持横屏与折叠屏自适应。",
+      "iconURL": "https://raw.githubusercontent.com/wlt743/NekoMusicForIOS_Not-web/main/docs/images/nekomusic-iphone.jpg",
+      "tintColor": "#FF2D55",
+      "category": "music",
+      "versions": [
+        {
+          "version": "26.10.1",
+          "date": "2026-10-24",
+          "downloadURL": "https://github.com/wlt743/NekoMusicForIOS_Not-web/releases/download/v26.10.1/NekoMusic-26.10.1-unsigned.ipa",
+          "size": 2414924,
+          "minOSVersion": "16.0"
+        }
+      ]
+    }
+  ],
+  "news": []
+}

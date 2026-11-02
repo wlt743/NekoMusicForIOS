@@ -1,0 +1,22 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Archive and export NekoMusic as a development IPA"
+  lane :pack do
+    build_app(
+      project: "NekoMusic.xcodeproj",
+      scheme: "NekoMusic",
+      configuration: "Release",
+      export_method: "development",
+      export_options: "ExportOptions.plist",
+      output_directory: "build",
+      output_name: "NekoMusic.ipa",
+      archive_path: "build/NekoMusic.xcarchive",
+      derived_data_path: "build/DerivedData",
+      clean: true,
+      include_symbols: true,
+      include_bitcode: false,
+      xcargs: "-allowProvisioningUpdates"
+    )
+  end
+end
