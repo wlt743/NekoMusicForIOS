@@ -19,6 +19,7 @@
 		B1000010 /* FavoriteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000010 /* FavoriteService.swift */; };
 		B1000011 /* AudioPlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000011 /* AudioPlayerService.swift */; };
 		B10000A3 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A3 /* OnboardingView.swift */; };
+		B10000A4 /* ServerConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A4 /* ServerConfigView.swift */; };
 		B10000A2 /* ServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A2 /* ServerConfig.swift */; };
 		B10000A1 /* HapticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000A1 /* HapticsService.swift */; };
 		B1000012 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000012 /* HomeView.swift */; };
@@ -82,6 +83,7 @@
 		B2000010 /* FavoriteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteService.swift; sourceTree = "<group>"; };
 		B2000011 /* AudioPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerService.swift; sourceTree = "<group>"; };
 		B20000A3 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		B20000A4 /* ServerConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfigView.swift; sourceTree = "<group>"; };
 		B20000A2 /* ServerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfig.swift; sourceTree = "<group>"; };
 		B20000A1 /* HapticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsService.swift; sourceTree = "<group>"; };
 		B2000012 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				B2000015 /* ProfileView.swift */,
 				B2000016 /* NowPlayingView.swift */,
 				B20000A3 /* OnboardingView.swift */,
+				B20000A4 /* ServerConfigView.swift */,
 				B2000017 /* MiniPlayerBar.swift */,
 				B2000018 /* LoginView.swift */,
 				B2000019 /* MusicListView.swift */,
@@ -400,6 +403,7 @@
 				B1000001 /* NekoMusicApp.swift in Sources */,
 				B1000002 /* ContentView.swift in Sources */,
 				B10000A3 /* OnboardingView.swift in Sources */,
+				B10000A4 /* ServerConfigView.swift in Sources */,
 				B1000003 /* Music.swift in Sources */,
 				B1000004 /* User.swift in Sources */,
 				B1000005 /* Playlist.swift in Sources */,

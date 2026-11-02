@@ -283,6 +283,15 @@ struct SettingsView: View {
                 }
             }
 
+            Section("服务") {
+                NavigationLink {
+                    ServerConfigView(config: ServerConfig.shared)
+                        .environmentObject(AppearanceSettings.shared)
+                } label: {
+                    Label("接口服务器", systemImage: "network")
+                }
+            }
+
             Section("信息") {
                 LabeledContent("版本", value: appVersion)
             }

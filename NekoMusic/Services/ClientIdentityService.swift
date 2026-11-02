@@ -110,6 +110,20 @@ actor ClientIdentityService {
         UserDefaults.standard.removeObject(forKey: expiryKey)
     }
 
+    /// 切换接口服务器时调用：实例与令牌都绑定在原来的服务器上，
+    /// 换服务器必须整体作废，否则新服务器会认为实例非法。
+    func resetForNewServer() {
+        invalidate()
+        instanceID = nil
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: keyService,
+            kSecAttrAccount as String: idAccount,
+        ]
+        SecItemDelete(query as CFDictionary)
+        NSLog("[NekoIdentity] reset for new server")
+    }
+
     /// 供调试：当前实例 ID
     func currentInstanceID() -> String? {
         loadIfNeeded()
